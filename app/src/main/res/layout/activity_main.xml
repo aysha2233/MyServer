@@ -6,7 +6,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
 
-    <TextView android:text="Hello World!" android:layout_width="wrap_content"
+    <TextView android:text="No Server!!!" android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
@@ -17,8 +17,56 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="StartServer"
-        android:id="@+id/server_btn"
+        android:id="@+id/Server"
+        android:layout_marginTop="21dp"
         android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp" />
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="phone"
+        android:ems="10"
+        android:id="@+id/PhoneNumber"
+        android:layout_above="@+id/Port"
+        android:layout_alignLeft="@+id/Server"
+        android:layout_alignStart="@+id/Server" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/Port"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/PhoneNumber"
+        android:layout_alignStart="@+id/PhoneNumber"
+        android:text="8091" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PhoneNumber: "
+        android:id="@+id/textView2"
+        android:layout_alignBottom="@+id/PhoneNumber"
+        android:layout_toLeftOf="@+id/PhoneNumber"
+        android:layout_toStartOf="@+id/PhoneNumber" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Port: "
+        android:id="@+id/textView3"
+        android:layout_alignBottom="@+id/Port"
+        android:layout_alignLeft="@+id/textView2"
+        android:layout_alignStart="@+id/textView2" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="StartSmsSever"
+        android:id="@+id/SmsServer"
+        android:layout_marginTop="27dp"
+        android:layout_below="@+id/Port"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
