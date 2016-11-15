@@ -15,6 +15,8 @@
  ******************************************************************************/
 package org.eclipse.californium.examples;
 
+import android.util.Log;
+
 import org.eclipse.californium.core.CaliforniumLogger;
 import org.eclipse.californium.core.CoapResource;
 import org.eclipse.californium.core.CoapServer;
@@ -42,6 +44,7 @@ import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.cert.Certificate;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import cn.sms.util.SmsHander;
 import cn.sms.util.SmsSocket;
@@ -57,8 +60,9 @@ public class SmsSecureServer {
 		ScandiumLogger.setLevel(Level.FINER);
 	}
 
+	private static final Logger LOGGER = Logger.getLogger(SmsSecureServer.class.getCanonicalName());
 	// allows configuration via Californium.properties
-	public static final int DTLS_PORT = NetworkConfig.getStandard().getInt(NetworkConfig.Keys.COAP_SECURE_PORT);
+	public static final int DTLS_PORT = 5684;//NetworkConfig.getStandard().getInt(NetworkConfig.Keys.COAP_SECURE_PORT);
 
 	private static final String TRUST_STORE_PASSWORD = "rootPass";
 	private final static String KEY_STORE_PASSWORD = "endPass";
@@ -99,7 +103,8 @@ public class SmsSecureServer {
 			smsdtlsConnector.setRawDataReceiver(new RawDataChannel() {
 				@Override
 				public void receiveData(RawData raw) {
-					System.out.println(raw.getBytes());
+					System.out.println(new String(raw.getBytes()));
+					//LOGGER.log(Level.FINE, "message is received from client {0} ", new Object[]{raw.getBytes()});
 				}
 			});
 

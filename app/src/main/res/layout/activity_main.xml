@@ -8,17 +8,16 @@
 
     <TextView android:text="No Server!!!" android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/textView"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="64dp"
-        android:id="@+id/textView" />
+        android:layout_marginTop="37dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="StartServer"
         android:id="@+id/Server"
-        android:layout_marginTop="21dp"
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true" />
 
@@ -29,8 +28,11 @@
         android:ems="10"
         android:id="@+id/PhoneNumber"
         android:layout_above="@+id/Port"
-        android:layout_alignLeft="@+id/Server"
-        android:layout_alignStart="@+id/Server" />
+        android:text="18612597804"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@+id/textView2"
+        android:layout_toEndOf="@+id/textView2" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -39,23 +41,25 @@
         android:ems="10"
         android:id="@+id/Port"
         android:layout_centerVertical="true"
-        android:layout_alignLeft="@+id/PhoneNumber"
-        android:layout_alignStart="@+id/PhoneNumber"
-        android:text="8091" />
+        android:text="8092"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/textView2"
+        android:layout_toRightOf="@+id/textView2" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PhoneNumber: "
+        android:text="ClientPhone: "
         android:id="@+id/textView2"
-        android:layout_alignBottom="@+id/PhoneNumber"
-        android:layout_toLeftOf="@+id/PhoneNumber"
-        android:layout_toStartOf="@+id/PhoneNumber" />
+        android:layout_above="@+id/Port"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Port: "
+        android:text="ClientPort: "
         android:id="@+id/textView3"
         android:layout_alignBottom="@+id/Port"
         android:layout_alignLeft="@+id/textView2"
@@ -66,7 +70,30 @@
         android:layout_height="wrap_content"
         android:text="StartSmsSever"
         android:id="@+id/SmsServer"
-        android:layout_marginTop="27dp"
+        android:layout_marginTop="52dp"
         android:layout_below="@+id/Port"
         android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="LocalPort:"
+        android:id="@+id/textView4"
+        android:layout_above="@+id/PhoneNumber"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/LocalPort"
+        android:layout_above="@+id/PhoneNumber"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:text="8091"
+        android:layout_alignLeft="@+id/PhoneNumber"
+        android:layout_alignStart="@+id/PhoneNumber" />
 </RelativeLayout>

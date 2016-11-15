@@ -267,7 +267,7 @@ public class SMSDTLSConnector implements Connector {
 		} else {
 			LOGGER.config("Cannot determine MTU of network interface, using minimum MTU [1280] of IPv6 instead");
 			//this.maximumTransmissionUnit = 1280;
-this.maximumTransmissionUnit = 140;			
+this.maximumTransmissionUnit = 135;
 		}
 
 		if (config.getMaxFragmentLengthCode() != null) {
@@ -390,13 +390,13 @@ this.maximumTransmissionUnit = 140;
 		}
 		InetSocketAddress peerAddress = new InetSocketAddress(message.getAddress(), message.getPort());
 
-		List<Record> records = Record.fromByteArray(message.getBytes(), peerAddress);
+		List<Record> records = Record.fromByteArray(message.bytes, peerAddress);
 		LOGGER.log(Level.FINER, "Received {0} DTLS records using a {1} byte datagram buffer",
 				new Object[]{records.size(), inboundDatagramBufferSize});
 
 		for (Record record : records) {
 			try {
-				LOGGER.log(Level.FINEST, "Received DTLS record of type [{0}]", record.getType());
+				LOGGER.log(Level.FINE, record.toString());
 
 				switch(record.getType()) {
 				case APPLICATION_DATA:
@@ -571,6 +571,8 @@ this.maximumTransmissionUnit = 140;
 	}
 
 	private void handleApplicationMessage(ApplicationMessage message, DTLSSession session) {
+		LOGGER.log(Level.FINER,
+				"handleApplicationMessage [{0}]", new Object[]{messageHandler});
 		if (messageHandler != null) {
 			DtlsCorrelationContext context = new DtlsCorrelationContext(
 					session.getSessionIdentifier().toString(),
@@ -707,12 +709,20 @@ this.maximumTransmissionUnit = 140;
 					if (null != message && HandshakeType.CLIENT_HELLO.equals(message.getMessageType())) {
 						record.setFragment(message);
 						processClientHello((ClientHello) message, record);
+						LOGGER.log(
+								Level.FINE,
+								"[handleFragmentation] [epoch={0}] received from peer [{1}] without existing connection",
+								new Object[]{record.getEpoch(), record.getPeerAddress()});
 					}
 				}
 				
 				// if we do not have a connection yet we ignore everything but a CLIENT_HELLO
 				else if (HandshakeType.CLIENT_HELLO.equals(handshakeMessage.getMessageType())) {
 					processClientHello((ClientHello) handshakeMessage, record);
+					LOGGER.log(
+							Level.FINE,
+							"[processClientHello] [epoch={0}] received from peer [{1}] without existing connection",
+							new Object[]{record.getEpoch(), record.getPeerAddress()});
 				} else {
 					LOGGER.log(
 							Level.FINE,
@@ -834,8 +844,8 @@ this.maximumTransmissionUnit = 140;
 		} else {
 			LOGGER.log(
 				Level.FINE,
-				"Discarding HANDSHAKE message [epoch={0}] from peer [{1}] which does not match expected epoch(s)",
-				new Object[]{record.getEpoch(), record.getPeerAddress()});
+				"Discarding HANDSHAKE message [epoch={0}] from peer [{1}] which does not match expected epoch(s) record type is {2}",
+				new Object[]{record.getEpoch(), record.getPeerAddress(), record.getType()});
 			return;
 		}
 
@@ -873,9 +883,9 @@ this.maximumTransmissionUnit = 140;
 			connection.getOngoingHandshake().processMessage(record);
 		} else {
 			LOGGER.log(
-				Level.FINE,
-				"Discarding {0} message received from peer [{1}] with no handshake going on",
-				new Object[]{message.getMessageType(), message.getPeer()});
+					Level.FINE,
+					"Discarding {0} message received from peer [{1}] with no handshake going on",
+					new Object[]{message.getMessageType(), message.getPeer()});
 		}
 	}
 
@@ -1015,6 +1025,10 @@ this.maximumTransmissionUnit = 140;
 	 *           cannot be used to start a handshake with the peer
 	 */
 	private void startNewHandshake(final ClientHello clientHello, final Record record) throws HandshakeException {
+		LOGGER.log(
+				Level.FINE,
+				"[Server startNewHandshake] [epoch={0}] received from peer [{1}] without existing connection",
+				new Object[]{record.getEpoch(), record.getPeerAddress()});
 		Connection peerConnection = new Connection(record.getPeerAddress());
 		connectionStore.put(peerConnection);
 
@@ -1269,6 +1283,7 @@ this.maximumTransmissionUnit = 140;
 						String.valueOf(session.getWriteEpoch()),
 						session.getWriteStateCipher());
 				message.getMessageCallback().onContextEstablished(ctx);
+				LOGGER.log(Level.FINE, "message.getMessageCallback failed!");
 			}
 			sendRecord(record);
 		} catch (GeneralSecurityException e) {
@@ -1337,9 +1352,13 @@ this.maximumTransmissionUnit = 140;
 
 		// put as many records into one datagram as allowed by the max. payload size
 		List<DatagramPacket> datagrams = new ArrayList<DatagramPacket>();
-
+		/*for (Record record : flight.getMessages()) {
+			sendRecord(record);
+			LOGGER.log(Level.INFO, record.toString());
+		}*/
 		try {
-			for (Record record : flight.getMessages()) {
+
+		for (Record record : flight.getMessages()) {
 
 				byte[] recordBytes = record.toByteArray();
 				if (recordBytes.length > maxDatagramSize) {
@@ -1399,8 +1418,15 @@ this.maximumTransmissionUnit = 140;
 		} else {
 			LOGGER.log(Level.FINE, "Socket [{0}] is closed, discarding packet ...", config.getAddress());
 		}*/
-		if (smsSocketAddress != null)
+		if (smsSocketAddress != null) {
 			smsSocket.sendBinary(smsSocketAddress.getPhoneNumber(), smsSocketAddress.getPort(), datagramPacket.getData());
+			// 发送短信后间隔500ms继续发送
+			try {
+				Thread.sleep(300);
+			} catch (InterruptedException e) {
+				LOGGER.log(Level.FINE, "sleeping is interrupted...");
+			}
+		}
 	}
 
 	private void handleTimeout(DTLSFlight flight) {

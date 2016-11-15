@@ -764,7 +764,7 @@ this.maximumTransmissionUnit = 140;
 */
 		/** Store the fragmented messages until we are able to reassemble the handshake message. */
 		protected Map<Integer, SortedSet<FragmentedHandshakeMessage>> fragmentedMessages = new HashMap<Integer, SortedSet<FragmentedHandshakeMessage>>();
-		// 新增函数
+		// new function !!!
 		private final HandshakeMessage handleFragmentation(FragmentedHandshakeMessage fragment, InetSocketAddress sockAddr) throws HandshakeException {
 
 			LOGGER.log(Level.FINER, "Processing {0} message fragment ...", fragment.getMessageType());
@@ -799,7 +799,7 @@ this.maximumTransmissionUnit = 140;
 			
 			return reassembledMessage;
 		}
-		// 新增函数
+		// new function
 		private final HandshakeMessage reassembleFragments(
 				int messageSeq,
 				SortedSet<FragmentedHandshakeMessage> fragments,

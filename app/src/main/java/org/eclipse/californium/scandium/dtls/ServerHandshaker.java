@@ -326,7 +326,7 @@ public class ServerHandshaker extends Handshaker {
 		}
 
 		clientCertificate = message;
-		clientCertificate.verifyCertificate(rootCertificates);
+		//clientCertificate.verifyCertificate(rootCertificates);
 		clientPublicKey = clientCertificate.getPublicKey();
 		if (message.getCertificateChain() != null && message.getCertificateChain().length > 0) {
 			peerCertificate = (X509Certificate) message.getCertificateChain()[0];
@@ -614,6 +614,9 @@ public class ServerHandshaker extends Handshaker {
 		handshakeMessages = ByteArrayUtils.concatenate(handshakeMessages, serverHelloDone.toByteArray());
 
 		recordLayer.sendFlight(flight);
+		LOGGER.log(
+				Level.FINE,
+				"[receivedClientHello] sendFlight!!");
 	}
 
 	/**

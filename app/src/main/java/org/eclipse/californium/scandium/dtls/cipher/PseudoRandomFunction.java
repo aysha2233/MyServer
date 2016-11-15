@@ -16,6 +16,9 @@
  ******************************************************************************/
 package org.eclipse.californium.scandium.dtls.cipher;
 
+import android.annotation.TargetApi;
+import android.os.Build;
+
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -65,7 +68,8 @@ public final class PseudoRandomFunction {
 		}
 
 		public byte[] getBytes() {
-			return value.getBytes(StandardCharsets.UTF_8);
+			//return value.getBytes(StandardCharsets.UTF_8);
+			return value.getBytes();
 		}
 
 		public int length() {

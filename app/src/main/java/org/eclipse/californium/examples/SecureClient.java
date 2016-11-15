@@ -70,7 +70,7 @@ public class SecureClient {
 				
 		URI uri = null;
 		
-		String u = "coaps://localhost/secure";
+		String u = "coaps://localhost/secur ";
 		
 		try {
 			uri = new URI(u);
